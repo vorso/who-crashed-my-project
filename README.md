@@ -14,7 +14,11 @@ I have included the project which was giving me errors. You can try WhoCrashedMy
 
 ## How to use it:
 
-Before starting: This program moves VST + VST3 files around on your computer!! PLEASE make sure that you MAKE A BACKUP COPY of your plugin folders before you run this. If you notice any missing plugins at the end, they may be in the Isolation Folder, which is located in the outer program directory (who-crashed-my-project).
+### Before starting: 
+
+This program moves VST + VST3 files around on your computer!! PLEASE make sure that you MAKE A BACKUP COPY of your plugin folders before you run this. If you notice any missing plugins at the end, they may be in the Isolation Folder, which is located in the outer program directory (who-crashed-my-project).
+
+Make sure that Ableton is closed before starting.
 
 1. Run WhoCrashedMyProject...
   - ... using Command Line
