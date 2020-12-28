@@ -14,6 +14,19 @@ The debug phase then begins. An isolation folder is created temporarily. The pro
 
 Before starting: This program moves VST + VST3 files around on your computer!! PLEASE make sure that you MAKE A BACKUP COPY of your plugin folders before you run this. If you notice any missing plugins at the end, they may be in the Isolation Folder, which is located in the outer program directory (who-crashed-my-project).
 
+1. Run WhoCrashedMyProject. 
+  - Command Line
+    - Right click the Command Line and click "Run As Administrator".
+    - Navigate to the WhoCrashedMyProject directory.
+    - Run << mvn compile exec:java -Dexec.mainClass="com.vorso.WhoCrashedMyProject" >>
+    
+  - VSCode
+    - Right click VSCode and click "Run As Administrator". 
+    - Open the WhoCrashedMyProject Folder
+    - Open the Terminal window (This results will be output).
+    - Press Ctrl+F5 or click Run > Run without Debugging
+    
+    
 1. The VST + VST3 folders can only by edited by adiministrators by default. 
   If you are running in an IDE such as VSCode, run your IDE as Administrator. 
  
