@@ -2,7 +2,7 @@
 
 ## A VST/VST3 tester for Ableton Live on Windows
 
-I have recently switched OS's to Windows and noticed that I get occasional problems with running external plugins in Ableton Live. I recently created a project which would crash instantly on opening. A solution for this is to disable each VST / VST3 plugin used in the project one by one until the project loads correctly. This search can be time consuming to perform, so I created this software to automate the process. 
+I have recently switched OS's to Windows and noticed that I get occasional problems with running external plugins in Ableton Live. I recently created a project which would crash instantly on opening. A solution for this is to disable each VST / VST3 plugin used in the project one by one until the project loads correctly. This search can be time consuming to perform, so I created this software to automate the process. This project was created using Java in VSCode and can be built using Maven.
 
 ## How it works:
 
@@ -16,13 +16,13 @@ I have included the project which was giving me errors. You can try WhoCrashedMy
 
 Before starting: This program moves VST + VST3 files around on your computer!! PLEASE make sure that you MAKE A BACKUP COPY of your plugin folders before you run this. If you notice any missing plugins at the end, they may be in the Isolation Folder, which is located in the outer program directory (who-crashed-my-project).
 
-1. Run WhoCrashedMyProject. 
-  - Command Line
+1. Run WhoCrashedMyProject...
+  - ... using Command Line
     - Right click the Command Line and click "Run As Administrator".
     - Navigate to the WhoCrashedMyProject directory.
-    - Run << mvn compile exec:java -Dexec.mainClass="com.vorso.WhoCrashedMyProject" >>
+    - Run << mvn compile exec:java -Dexec.mainClass="com.vorso.WhoCrashedMyProject" >> (note: you will need Maven installed to use this command, useful links - https://www.baeldung.com/install-maven-on-windows-linux-mac , https://maven.apache.org/install.html )
     
-  - VSCode
+  - ... using VSCode
     - Right click VSCode and click "Run As Administrator". 
     - Open the WhoCrashedMyProject Folder
     - Open the Terminal window (This results will be output).
