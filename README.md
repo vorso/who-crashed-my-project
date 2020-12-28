@@ -20,7 +20,13 @@ This program moves VST + VST3 files around on your computer!! PLEASE make sure t
 
 Make sure that Ableton is closed before starting.
 
-1. Run WhoCrashedMyProject...
+- Open the file paths.properties - This file needs to contain:
+    VST_FOLDER:{<<Path to your VST Folder>>},
+    VST3_FOLDER:{<<Path to your VST3 Folder>>},
+    ABLETON_PATH:{<<Path to the Ableton Live 10 Suite.exe file this is inside the Ableton package Ableton/Live 10 Suite/Program/Ableton Live 10 Suite.exe>>},
+    PROJECT_PATH:{<<Path to the .als file of your project>>}
+
+- Run WhoCrashedMyProject...
   - ... using Command Line
     - Right click the Command Line and click "Run As Administrator".
     - Navigate to the WhoCrashedMyProject directory.
@@ -33,20 +39,20 @@ Make sure that Ableton is closed before starting.
     - Press Ctrl+F5 or click Run > Run without Debugging
     
     
- 2. The VST + VST3 folders can only by edited by adiministrators by default. 
+- The VST + VST3 folders can only by edited by adiministrators by default. 
   If you are running in an IDE such as VSCode, run your IDE as Administrator. 
  
-3. The program will open a dialogue box. Select the Ableton Live .als project to be analysed. 
+- The program will open a dialogue box. Select the Ableton Live .als project to be analysed. 
 
-4. The VST + VST3 plugins used in the project will be shown in your terminal, accompanyed by the number of instances of each plugin
+- The VST + VST3 plugins used in the project will be shown in your terminal, accompanyed by the number of instances of each plugin
 
-5. The debug phase begins. Plugins are isolated in random order. The program will open Ableton Live each time. 
+- The debug phase begins. Plugins are isolated in random order. The program will open Ableton Live each time. 
   - If Ableton Live crashes, the user needs to click OK on the dialogue box to allow Live to close.
   - If Ableton Live opens the project successfully, PLEASE ENSURE THAT YOU CLOSE ABLETON LIVE BY CLICKING THE CROSS AFTER IT LOADS. This allows the program to continue testing the rest of the plugins. Halting the program early may leave plugin files in the temporary folder!!
     Ableton Live will be opened TWICE if a crash did not occur. This is required because Ableton will not re-detect the missing plugin. 
     
-6. Repeat step 5 until all plugins used in the project have been tested.
+- Repeat step 5 until all plugins used in the project have been tested.
   
-7. A final crash report is generated and shown. Plugins which caused a crash are shown in red.
+- A final crash report is generated and shown. Plugins which caused a crash are shown in red.
 
 I hope this helps!
