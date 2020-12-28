@@ -44,7 +44,9 @@ Make sure that Ableton is closed before starting.
   - If Ableton Live crashes, the user needs to click OK on the dialogue box to allow Live to close.
   - If Ableton Live opens the project successfully, PLEASE ENSURE THAT YOU CLOSE ABLETON LIVE BY CLICKING THE CROSS AFTER IT LOADS. This allows the program to continue testing the rest of the plugins. Halting the program early may leave plugin files in the temporary folder!!
     Ableton Live will be opened TWICE if a crash did not occur. This is required because Ableton will not re-detect the missing plugin. 
+    
+6. Repeat step 5 until all plugins used in the project have been tested.
   
-6. A final crash report is generated and shown. Plugins which caused a crash are shown in red.
+7. A final crash report is generated and shown. Plugins which caused a crash are shown in red.
 
 I hope this helps!
