@@ -1,16 +1,18 @@
-## who-crashed-my-project
+# who-crashed-my-project
 
-# A VST/VST3 tester for Ableton Live on Windows
+## A VST/VST3 tester for Ableton Live on Windows
 
 I have recently switched OS's to Windows and noticed that I get occasional problems with running external plugins in Ableton Live. I recently created a project which would crash instantly on opening. A solution for this is to disable each VST / VST3 plugin used in the project one by one until the project loads correctly. This search can be time consuming to perform, so I created this software to automate the process. 
 
-# How it works:
+## How it works:
 
 An Ableton Live Project file with extension .als is selected via the file chooser. An Ableton Live .als file is a GZIP'd .xml file. The program starts by unzipping this, yielding an xml file that is loaded in and parsed (note: you can unzip a .als file very easily using an unzipper such as 7-zip. Rename the produced file to include the file extension .xml and you can open it in VSCode or equivalent). The names and types (VST / VST3) of all plugins used in the project is analysed and listed to the user. 
 The debug phase then begins. An isolation folder is created temporarily. The program moves a single plugin which is used in the project into the isolation folder and attempts to open Ableton Live. The project will be loaded with all but the isolated plugin. The project loading will either crash, indicating that the currently excluded plugin was not responsible for the crash on loading, or will load as expected, indicating the excluded plugin was causing the crash. The program will wait until the user dismisses the error dialogue box or closes Ableton, and then will repeat for the next plugin. Finally, once all plugins have been tested, a crash report is generated and shown on the command line to the user. 
 
+I have included the project which was giving me errors. You can try WhoCrashedMyProject out using Moog Sesh.als.
 
-# How to use it:
+
+## How to use it:
 
 Before starting: This program moves VST + VST3 files around on your computer!! PLEASE make sure that you MAKE A BACKUP COPY of your plugin folders before you run this. If you notice any missing plugins at the end, they may be in the Isolation Folder, which is located in the outer program directory (who-crashed-my-project).
 
@@ -42,8 +44,3 @@ Before starting: This program moves VST + VST3 files around on your computer!! P
 6. A final crash report is generated and shown. Plugins which caused a crash are shown in red.
 
 I hope this helps!
-  
-  
-
-
-Note: The Java program must be run in administrator mode as the VST + VST3 folders are only editable by administrators by default. 
