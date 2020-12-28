@@ -14,7 +14,7 @@ The debug phase then begins. An isolation folder is created temporarily. The pro
 
 Before starting: This program moves VST + VST3 files around on your computer!! PLEASE make sure that you MAKE A BACKUP COPY of your plugin folders before you run this. If you notice any missing plugins at the end, they may be in the Isolation Folder, which is located in the outer program directory (who-crashed-my-project).
 
-1. Run WhoCrashedMyProject. 
+- 1. Run WhoCrashedMyProject. 
   - Command Line
     - Right click the Command Line and click "Run As Administrator".
     - Navigate to the WhoCrashedMyProject directory.
@@ -27,19 +27,19 @@ Before starting: This program moves VST + VST3 files around on your computer!! P
     - Press Ctrl+F5 or click Run > Run without Debugging
     
     
-1. The VST + VST3 folders can only by edited by adiministrators by default. 
+- 2. The VST + VST3 folders can only by edited by adiministrators by default. 
   If you are running in an IDE such as VSCode, run your IDE as Administrator. 
  
-2. The program will open a dialogue box. Select the Ableton Live .als project to be analysed. 
+- 3. The program will open a dialogue box. Select the Ableton Live .als project to be analysed. 
 
-3. The VST + VST3 plugins used in the project will be shown in your terminal, accompanyed by the number of instances of each plugin
+- 4. The VST + VST3 plugins used in the project will be shown in your terminal, accompanyed by the number of instances of each plugin
 
-4. The debug phase begins. Plugins are isolated in random order. The program will open Ableton Live each time. 
+- 5. The debug phase begins. Plugins are isolated in random order. The program will open Ableton Live each time. 
   - If Ableton Live crashes, the user needs to click OK on the dialogue box to allow Live to close.
   - If Ableton Live opens the project successfully, PLEASE ENSURE THAT YOU CLOSE ABLETON LIVE BY CLICKING THE CROSS AFTER IT LOADS. This allows the program to continue testing the rest of the plugins. Halting the program early may leave plugin files in the temporary folder!!
     Ableton Live will be opened TWICE if a crash did not occur. This is required because Ableton will not re-detect the missing plugin. 
   
-5. A final crash report is generated and shown. Plugins which caused a crash are shown in red.
+- 6. A final crash report is generated and shown. Plugins which caused a crash are shown in red.
 
 I hope this helps!
   
