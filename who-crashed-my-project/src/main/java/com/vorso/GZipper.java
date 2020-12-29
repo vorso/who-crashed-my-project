@@ -5,6 +5,11 @@ import java.io.IOException;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
+/** GZipper
+ * 
+ * A GZipping Utility
+ * 
+ */
 public class GZipper {
 
 	public void decompressGzipFile(String gzipFile, String newFile) throws IOException {

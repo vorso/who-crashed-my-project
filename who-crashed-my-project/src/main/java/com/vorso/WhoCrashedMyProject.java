@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Stream;
 
 import javax.swing.JFileChooser;
 import javax.xml.parsers.DocumentBuilder;
@@ -53,12 +52,17 @@ import org.xml.sax.SAXException;
  *    \\//
  * 
  * Created by Vorso
+ * If WhoCrashedMyProject helped you out with a corrupted project 
+ * please consider supporting my stuff here:
+ * 
  * Soundcloud:  https://soundcloud.com/vorso
  * Spotify:     https://open.spotify.com/artist/5Og6MsfuDPnFYd1asgHXdH
  * Twitter:     https://twitter.com/vorsomusic
  * Facebook:    https://facebook.com/vorsomusic
+ * Youtube:     https://www.youtube.com/c/VorsoMusic
+ * Bandcamp:    https://vorso.bandcamp.com/releases
  * 
- * I hope it helps :-)
+ * Thanks :^)
  */
 
 
@@ -66,23 +70,15 @@ import org.xml.sax.SAXException;
 public class WhoCrashedMyProject {
 
     public static final String ANSI_RESET = "\u001B[0m";
-    public static final String ANSI_BLACK = "\u001B[30m";
     public static final String ANSI_RED = "\u001B[31m";
     public static final String ANSI_GREEN = "\u001B[32m";
     public static final String ANSI_YELLOW = "\u001B[33m";
-    public static final String ANSI_BLUE = "\u001B[34m";
-    public static final String ANSI_PURPLE = "\u001B[35m";
-    public static final String ANSI_CYAN = "\u001B[36m";
-    public static final String ANSI_WHITE = "\u001B[37m";
 
     public static String VST_FOLDER = "";
     public static String VST3_FOLDER = "";
     public static String ABLETON_PATH = "";
     public static String PROJECT_PATH = "";
     public final static String ISOLATION_FOLDER = "./Isolation Folder";
-
-
-
     public static String tempFileNameStore = "";
 
     public static ArrayList<Plugin> plugins = new ArrayList<>();
@@ -107,22 +103,14 @@ public class WhoCrashedMyProject {
             System.out.println(ANSI_RED + "Ableton application project file found in supplied Ableton file" + ANSI_RESET);
             return false;
         }
-
-        File projectFile = new File(linuxPathToWindows(PROJECT_PATH));
-        if(!projectFile.isFile()) {
-            System.out.println(ANSI_RED + "No .als project file found in supplied Ableton Project file" + ANSI_RESET);
-            return false;
-        }
         return true;
     }
 
 
     
     private static void parseProperties() throws IOException {
-   
-        File directory = new File("who-crashed-my-project");
-
-        List<String> lines = Files.readAllLines(Paths.get(directory.getAbsolutePath().replace("\\", "\\\\") + "\\\\paths.properties"), StandardCharsets.UTF_8);
+           
+        List<String> lines = Files.readAllLines(Paths.get("paths.properties"), StandardCharsets.UTF_8);
 
         for(int i = 0; i < lines.size(); i++) {
             if(lines.get(i).contains("VST_FOLDER")) {
@@ -134,20 +122,11 @@ public class WhoCrashedMyProject {
             if(lines.get(i).contains("ABLETON_PATH")) {
                 ABLETON_PATH = lines.get(i).replace("ABLETON_PATH:{", "").replace("}", "").replace(",", "");
             } 
-            if(lines.get(i).contains("PROJECT_PATH")) {
-                PROJECT_PATH = lines.get(i).replace("PROJECT_PATH:{", "").replace("}", "").replace(",", "");
-            } 
         }
-
     }
 
     public static Boolean checkPropertiesFileExists() {
-        File directory = new File("who-crashed-my-project");
-        System.out.println(directory.getAbsolutePath());
-        System.out.println(directory.getAbsolutePath().replace("\\", "\\\\") + "\\\\paths.txt");
-        //"C:\\Users\\vorso\\Documents\\Dev\\who-crashed-my-project\\who-crashed-my-project\\paths.properties"
-
-        File properties = new File(directory.getAbsolutePath().replace("\\", "\\\\") + "\\\\paths.txt");
+        File properties = new File("paths.properties");
         if(!properties.isFile()) {
             System.out.println(ANSI_RED + "Properties file not found." + ANSI_RESET);
             return false;
@@ -177,10 +156,6 @@ public class WhoCrashedMyProject {
             System.out.println("Ableton Path not set correctly.");
             return;
         }
-        if("".equals(PROJECT_PATH)) {
-            System.out.println("Project Path not set correctly.");
-            return;
-        }
 
         File isolationFolder = new File(linuxPathToWindows(ISOLATION_FOLDER));
         if (!isolationFolder.exists()){
@@ -197,7 +172,8 @@ public class WhoCrashedMyProject {
 		int returnValue = projectFileChooser.showOpenDialog(null);
         
         if (returnValue == JFileChooser.APPROVE_OPTION) {
-			File ALSFile = projectFileChooser.getSelectedFile();
+            File ALSFile = projectFileChooser.getSelectedFile();
+            PROJECT_PATH = ALSFile.getAbsolutePath();
 			String extension = ALSFile.getAbsolutePath().split("\\.")[1];
 
 			if (extension.equals("als")) {
@@ -352,7 +328,6 @@ public class WhoCrashedMyProject {
                 openAbletonAgain.waitFor();
                 openAbletonAgain.destroy();
             }
- 
         }
     }
 
@@ -376,7 +351,7 @@ public class WhoCrashedMyProject {
     }
 
     public static File searchFile(File file, String search) {
-        if(search.contains("Uhbik")) {  //TODO Uhbik vst3 are all grouped into one file
+        if(search.contains("Uhbik")) {  //U-He Uhbik vst3 are all grouped into one file
             search = "Uhbik";
         }
 
@@ -388,7 +363,7 @@ public class WhoCrashedMyProject {
                     return found;
             }
         } else {
-            if (file.getName().contains(search) && !file.getName().contains("(Mono)")) { //TODO added in for Mono fabfilter plugins
+            if (file.getName().contains(search) && !file.getName().contains("(Mono)")) { //Fabfilter plugins also have (Mono) Duplicates
                 return file;
             }
         }

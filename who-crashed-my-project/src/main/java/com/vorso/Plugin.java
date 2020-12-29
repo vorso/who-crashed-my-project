@@ -1,5 +1,9 @@
 package com.vorso;
 
+/** Plugin
+ * 
+ * A datastore class for information about a VST/VST3 Plugin
+ */
 public class Plugin {
     public String name;
     public Boolean working;
