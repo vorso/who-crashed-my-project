@@ -66,9 +66,6 @@ import org.xml.sax.SAXException;
  * Thanks :^)
  */
 
-//TODO What if the vst file is not on the computer
-//TODO Clip _x64
-
 public class WhoCrashedMyProject {
 
     public static OS USER_OS;
@@ -87,7 +84,7 @@ public class WhoCrashedMyProject {
     public static File Vst_Folder;
     public static File Vst3_Folder;
     public static File Au_Folder;
-    public static File Ableton_Path;
+    public static File Ableton;
     public static File Project_File;
 
 
@@ -217,7 +214,9 @@ public class WhoCrashedMyProject {
                     printFinalReport(plugins);
 
                     System.out.println();
-                    System.out.println("Thank you for using WhoCrashedMyProject. I hope it helps. Click here to support me - https://soundcloud.com/vorso");
+                    System.out.println("Thank you for using WhoCrashedMyProject. I hope it helps!" + System.lineSeparator()
+                    + " Here is a link to my music if you want to support me: " 
+                    + ANSI_PURPLE + "https://soundcloud.com/vorso" + ANSI_RESET);
                     System.out.println("Cheers :-)");
 
                     if(Isolation_Folder.listFiles().length == 0) {
@@ -226,7 +225,7 @@ public class WhoCrashedMyProject {
                 }
                 catch (Exception e) {
                     System.out.println(ANSI_RED + "Encountered an error. Cleaning up Isolation Folder." + ANSI_RESET);
-                    if(testing) {
+                    if(currentPlugin.currentlyIsolated) {
                         undoIsolate();
                     }
                     if(Isolation_Folder.listFiles().length == 0) {
@@ -264,24 +263,23 @@ public class WhoCrashedMyProject {
         }
 
         if(USER_OS == OS.MAC) {
-            if(searchFile(new File(AU_FOLDER), ".component") == null) {
+            if(searchFile(Au_Folder, ".component") == null) {
                 System.out.println(ANSI_RED + "No AU files found in supplied Audio Unit Folder" + ANSI_RESET);
                 return false;
             }
         }
 
-        if(searchFile(new File(VST_FOLDER), vstFileExtension) == null) {
+        if(searchFile(Vst_Folder, vstFileExtension) == null) {
             System.out.println(ANSI_RED + "No " + vstFileExtension + " files found in supplied VST Folder" + ANSI_RESET);
             return false;
         }
 
-        if(searchFile(new File(VST3_FOLDER), ".vst3") == null) {
+        if(searchFile(Vst3_Folder, ".vst3") == null) {
             System.out.println(ANSI_RED + "No .vst3 files found in supplied VST3 Folder" + ANSI_RESET);
             return false;
         }
 
-        File abletonFile = new File(ABLETON_PATH);
-        if(!abletonFile.isFile()) {
+        if(!Ableton.isFile()) {
             System.out.println(ANSI_RED + "Ableton application project file found in supplied Ableton file" + ANSI_RESET);
             return false;
         }
@@ -350,7 +348,7 @@ public class WhoCrashedMyProject {
         Vst_Folder      = new File(parsePath(vstFolder));
         Vst3_Folder     = new File(parsePath(vst3Folder));
         Au_Folder       = new File(parsePath(auFolder));
-        Ableton_Path    = new File(parsePath(abletonPath));
+        Ableton    = new File(parsePath(abletonPath));
 
         VST_FOLDER      = parsePath(vstFolder);
         VST3_FOLDER     = parsePath(vst3Folder);
@@ -438,8 +436,9 @@ public class WhoCrashedMyProject {
                 }
                 else {
                     System.out.println(ANSI_RED + "The project opens correctly without " + 
-                    currentPlugin.name + " (" + currentPlugin.vstType +  "). This may indicate that this plugin" + 
-                    " is causing the crash." + ANSI_RESET); 
+                    currentPlugin.name + " (" + currentPlugin.vstType +  ")." + System.lineSeparator() +
+                    "This may indicate that this plugin" + 
+                    " is causing Ableton Live to crash." + ANSI_RESET); 
                     currentPlugin.working = false;
                     Thread.sleep(3000);
 
@@ -453,7 +452,7 @@ public class WhoCrashedMyProject {
     }
 
     public static Process OpenAbleton(File projectFile) throws IOException {
-        String[] params = {Ableton_Path.getAbsolutePath(), projectFile.getAbsolutePath()};
+        String[] params = {Ableton.getAbsolutePath(), projectFile.getAbsolutePath()};
         return Runtime.getRuntime().exec(params);
     }
 
@@ -467,6 +466,7 @@ public class WhoCrashedMyProject {
 
         currentPlugin.isolatedFile = Paths.get(Isolation_Folder.getAbsolutePath(), currentPlugin.pluginFile.getName()).toFile();
         FileUtils.moveDirectory(currentPlugin.pluginFile, currentPlugin.isolatedFile);
+        currentPlugin.currentlyIsolated = true;
 
         /*
         try {
@@ -481,14 +481,13 @@ public class WhoCrashedMyProject {
         //Boolean didItWork = thisVst.renameTo(new File(path2));
         Thread.sleep(1000);
 
-
         return currentPlugin.isolatedFile.toPath();
     }
 
     public static void undoIsolate() throws IOException, InterruptedException {
 
         FileUtils.moveDirectory(currentPlugin.isolatedFile, currentPlugin.pluginFile);
-
+        currentPlugin.currentlyIsolated = false;
         //Files.move(isolatedVstPath, Paths.get(tempFileNameStore),  StandardCopyOption.REPLACE_EXISTING);
         Thread.sleep(1000);
     }
