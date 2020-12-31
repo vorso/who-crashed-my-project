@@ -76,6 +76,7 @@ public class WhoCrashedMyProject {
     public static final String ANSI_RED = "\u001B[31m";
     public static final String ANSI_GREEN = "\u001B[32m";
     public static final String ANSI_YELLOW = "\u001B[33m";
+    public static final String ANSI_PURPLE = "\u001B[35m";
 
     public static String VST_FOLDER = "";
     public static String VST3_FOLDER = "";
@@ -419,7 +420,8 @@ public class WhoCrashedMyProject {
             testing = true;
             
             if(isolatedVstPath == null) {
-                System.out.println("The " + currentPlugin.vstType.name() + " file " + currentPlugin.name + " could not be found. Skipping test...");
+                System.out.println(ANSI_PURPLE + "The " + currentPlugin.vstType.name() + " file " 
+                + currentPlugin.name + " could not be found. Skipping test..." + ANSI_RESET);
             } else {
                 System.out.println("Opening Ableton...");
 
