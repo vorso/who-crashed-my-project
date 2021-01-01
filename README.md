@@ -49,7 +49,7 @@ Make sure that Ableton is closed before starting.
     On WINDOWS:
         ABLETON_PATH:{<<Absolute Path to the "Ableton Live 10 Suite.exe" file this is inside the Ableton package Ableton/Live 10 Suite/Program/Ableton Live 10 Suite.exe>>}
     On MAC:
-         ABLETON_PATH:{<<Absolute Path to the "Live" file this is inside the Ableton package Ableton Live 10 Suite/contents/MacOS/Live>>}
+        ABLETON_PATH:{<<Absolute Path to the "Live" file this is inside the Ableton package Ableton Live 10 Suite/contents/MacOS/Live>>}
          
 2 - Run WhoCrashedMyProject as administrator (Plugins folders normally can only be edited by administrators by default on Windows and Mac OS)...
   - ... using Command Line
