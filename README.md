@@ -40,17 +40,18 @@ IMPORTANT: This program moves VST + VST3 files around on your computer!! PLEASE 
 
 Make sure that Ableton is closed before starting.
 
-- Open the file paths.properties which is at /who-crashed-my-project/who-crashed-my-project/paths.properties - This file needs to contain:
+1. Open the file paths.properties which is at /who-crashed-my-project/who-crashed-my-project/paths.properties - This file needs to contain:
+
     VST_FOLDER:{<<Absolute Path to your VST Folder>>},
     VST3_FOLDER:{<<Absolute Path to your VST3 Folder>>},
     PROJECT_PATH:{<<Absolute Path to the .als file of your project>>},
     
-    - On WINDOWS:
+    On WINDOWS:
         ABLETON_PATH:{<<Absolute Path to the "Ableton Live 10 Suite.exe" file this is inside the Ableton package Ableton/Live 10 Suite/Program/Ableton Live 10 Suite.exe>>}
     - On MAC:
          ABLETON_PATH:{<<Absolute Path to the "Live" file this is inside the Ableton package Ableton Live 10 Suite/contents/MacOS/Live>>}
          
-- Run WhoCrashedMyProject as administrator (Plugins folders normally can only be edited by administrators by default on Windows and Mac OS)...
+2. Run WhoCrashedMyProject as administrator (Plugins folders normally can only be edited by administrators by default on Windows and Mac OS)...
   - ... using Command Line
     - Right click the Command Line icon and click "Run As Administrator".
     - Navigate to the WhoCrashedMyProject directory.
