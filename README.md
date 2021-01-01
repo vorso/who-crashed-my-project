@@ -2,32 +2,32 @@
 
 ## A VST/VST3 tester for Ableton Live on Windows and Mac OS
 
-    I have recently switched OS's to Windows and noticed that I get occasional problems with running external plugins in Ableton Live. One of the projects I was working on would crash immediately on opening. A common way of solving this problem manually is to move each plugin used in the project out of your plugins folder repeatedly, opening the project each time. When the plugin which causes the crash is removed, the project will open correctly. However, as Ableton Live does not provide tools to list what plugins are in a project without opening it, there is no way to narrow down which plugins might be causing the crash. This search can be time consuming to perform for every plugin in your folde. 
-    WhoCrashedMyProject is a Java program which automates this isolating and testing process for each plugin used in a project. It allows a way for a user to scan the project file for plugins used without opening it with Ableton Live. I created this project using Java and VSCode with Maven package management. 
+I have recently switched OS's to Windows and noticed that I get occasional problems with running external plugins in Ableton Live. One of the projects I was working on would crash immediately on opening. A common way of solving this problem manually is to move each plugin used in the project out of your plugins folder repeatedly, opening the project each time. When the plugin which causes the crash is removed, the project will open correctly. However, as Ableton Live does not provide tools to list what plugins are in a project without opening it, there is no way to narrow down which plugins might be causing the crash. This search can be time consuming to perform for every plugin in your folde. 
+WhoCrashedMyProject is a Java program which automates this isolating and testing process for each plugin used in a project. It allows a way for a user to scan the project file for plugins used without opening it with Ableton Live. I created this project using Java and VSCode with Maven package management. 
 
 
 ## How it works:
 
-    An Ableton Live Project file with the extension .als is actually a zipped .xml file. You can unzip a project file easily with a zip utility such as 7-zip on Windows or Keka on Mac, yielding a large .xml file containing all information stored about the live project.WhoCrashedMyProject takes advantage of this by reading this .xml file and locating the list of plugins used in the project file. As the actual .als file is not edited in the process this is will not affect the contents of the live project, so the project file will not changed in any way by running this program. You can actually try this process yourself manually -  after adding the file extension .xml to the end of the yielded file you get from unzipping a .als file you can open it in an IDE such as VSCode.  
-    Once a list of plugins is produced WhoCrashedMyProject creates a temporary isolation folder and each individual plugin into it, opening the Ableton Live project each time. If the project is unaffected by the move and continues to crash then the isolated plugin is likely not contributing to causing the problem. If Ableton Live opens the project with no crash then this indicates that the isolated plugin was the cause. 
-    After all plugins in the project have been tested, WhoCrashedMyProject generates and displays a crash report, showing each plugin used in the project, the number of instances of each plugin and which plugins caused a crash. 
+An Ableton Live Project file with the extension .als is actually a zipped .xml file. You can unzip a project file easily with a zip utility such as 7-zip on Windows or Keka on Mac, yielding a large .xml file containing all information stored about the live project.WhoCrashedMyProject takes advantage of this by reading this .xml file and locating the list of plugins used in the project file. As the actual .als file is not edited in the process this is will not affect the contents of the live project, so the project file will not changed in any way by running this program. You can actually try this process yourself manually -  after adding the file extension .xml to the end of the yielded file you get from unzipping a .als file you can open it in an IDE such as VSCode.  
+Once a list of plugins is produced WhoCrashedMyProject creates a temporary isolation folder and each individual plugin into it, opening the Ableton Live project each time. If the project is unaffected by the move and continues to crash then the isolated plugin is likely not contributing to causing the problem. If Ableton Live opens the project with no crash then this indicates that the isolated plugin was the cause. 
+After all plugins in the project have been tested, WhoCrashedMyProject generates and displays a crash report, showing each plugin used in the project, the number of instances of each plugin and which plugins caused a crash. 
 
-    I have included a sample Ableton Project (Moog Sesh.als) which would crash on opening. You can use it to try out WhoCrashedMyProject, however to re-create the crash you would need to have all the same plugins + plugins versions as I did. The report for this project was:
+I have included a sample Ableton Project (Moog Sesh.als) which would crash on opening. You can use it to try out WhoCrashedMyProject, however to re-create the crash you would need to have all the same plugins + plugins versions as I did. The report for this project was:
     
----------------- VST Plugins Used: ----------------
-FabFilter Pro-Q 3 ................................. 4
-FabFilter Pro-R ................................... 1
-FabFilter Pro-C 2 ................................. 1
-Serum ............................................. 1
-OTT ............................................... 1
+    ---------------- VST Plugins Used: ----------------
+    FabFilter Pro-Q 3 ................................. 4
+    FabFilter Pro-R ................................... 1
+    FabFilter Pro-C 2 ................................. 1
+    Serum ............................................. 1
+    OTT ............................................... 1
 
----------------- VST3 Plugins Used: ---------------
-MSED .............................................. 1
-Vital ............................................. 1
-Uhbik-G ........................................... 1
-Disperser ......................................... 1
-Pro-Q 3 ........................................... 2
-Pro-R ............................................. 2
+    ---------------- VST3 Plugins Used: ---------------
+    MSED .............................................. 1
+    Vital ............................................. 1
+    Uhbik-G ........................................... 1
+    Disperser ......................................... 1
+    Pro-Q 3 ........................................... 2
+    Pro-R ............................................. 2
 
 ...so if you have copies of these plugins you may be able to recreate the crash on Windows. 
 
