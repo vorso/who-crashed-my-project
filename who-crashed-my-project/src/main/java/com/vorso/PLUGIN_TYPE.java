@@ -1,6 +1,7 @@
 package com.vorso;
 
-public enum VST_TYPE {
+public enum PLUGIN_TYPE {
+    AU,
     VST,
     VST3
 }

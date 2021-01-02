@@ -75,24 +75,12 @@ public class WhoCrashedMyProject {
     public static final String ANSI_YELLOW = "\u001B[33m";
     public static final String ANSI_PURPLE = "\u001B[35m";
 
-    public static String VST_FOLDER = "";
-    public static String VST3_FOLDER = "";
-    public static String AU_FOLDER = "";
-    public static String ABLETON_PATH = "";
-    public static String PROJECT_PATH = "";
-
     public static File Vst_Folder;
     public static File Vst3_Folder;
     public static File Au_Folder;
     public static File Ableton;
     public static File Project_File;
-
-
-    //public final static String ISOLATION_FOLDER = "./Isolation Folder";
     public static File Isolation_Folder;
-
-    public static String tempFileNameStore = "";
-    public static boolean testing = false;
 
     public static Plugin currentPlugin;
 
@@ -106,6 +94,7 @@ public class WhoCrashedMyProject {
 
                     ArrayList<String> VSTPluginList = new ArrayList<>();
                     ArrayList<String> VST3PluginList = new ArrayList<>();
+                    ArrayList<String> AUPluginList = new ArrayList<>();
 
                     if(!checkPropertiesFileExists()) {
                         return;
@@ -115,19 +104,11 @@ public class WhoCrashedMyProject {
                         return;
                     }
 
-                    System.out.println(Paths.get("Isolation Folder"));
                     Isolation_Folder = new File(Paths.get("Isolation Folder").toString());
                     if (!Isolation_Folder.exists()){
                         Isolation_Folder.mkdirs();
                     }
 
-                    System.out.println(Isolation_Folder.getAbsolutePath());
-                    
-                    //File isolationFolder = new File(parsePath(ISOLATION_FOLDER));
-                    //if (!isolationFolder.exists()){
-                    //   isolationFolder.mkdirs();
-                // }
-            
                     if(!checkFolders()) {
                         return;
                     }
@@ -153,10 +134,10 @@ public class WhoCrashedMyProject {
                             Document document = documentBuilder.parse(XMLFile);  
                             document.getDocumentElement().normalize(); 
 
-                            NodeList VSTPlugins = document.getElementsByTagName("PlugName");
+                            NodeList VSTPluginsNodeList = document.getElementsByTagName("PlugName");
 
-                            for(int i = 0; i < VSTPlugins.getLength(); i++) {
-                                Element e = (Element)VSTPlugins.item(i);
+                            for(int i = 0; i < VSTPluginsNodeList.getLength(); i++) {
+                                Element e = (Element)VSTPluginsNodeList.item(i);
 
                                 String name;
                                 if(USER_OS == OS.MAC) {
@@ -167,14 +148,26 @@ public class WhoCrashedMyProject {
                                 VSTPluginList.add(name);
                             }
 
-                            NodeList VST3PluginsList = document.getElementsByTagName("Name");
-                            for(int i = 0; i < VST3PluginsList.getLength(); i++) {
-                                Element e = (Element)VST3PluginsList.item(i);
+                            NodeList VST3PluginsNodeList = document.getElementsByTagName("Name");
+                            for(int i = 0; i < VST3PluginsNodeList.getLength(); i++) {
+                                Element e = (Element)VST3PluginsNodeList.item(i);
 
                                 if(e.getParentNode().getNodeName().equals("Vst3PluginInfo")) {
                                     VST3PluginList.add(e.getAttribute("Value"));
                                 }     
                             }
+                            
+                            if(USER_OS == OS.MAC){ 
+                                NodeList AUPluginsNodeList = document.getElementsByTagName("Name");
+                                for(int i = 0; i < AUPluginsNodeList.getLength(); i++) {
+                                    Element e = (Element)AUPluginsNodeList.item(i);
+    
+                                    if(e.getParentNode().getNodeName().equals("AuPluginInfo")) {
+                                        AUPluginList.add(e.getAttribute("Value"));
+                                    }     
+                                }
+                            }
+
                             XMLFile.delete();
                         } else {
                             System.out.println(ANSI_RED + "Selected file was not a .als file, operation cancelled" + ANSI_RESET);
@@ -189,12 +182,22 @@ public class WhoCrashedMyProject {
                     HashMap<String, Integer> vst3Map = createVstMap(VST3PluginList);
 
                     for (HashMap.Entry<String, Integer> entry : vstMap.entrySet()) {
-                        plugins.add(new Plugin(entry.getKey(), entry.getValue(), VST_TYPE.VST, false));
+                        plugins.add(new Plugin(entry.getKey(), entry.getValue(), PLUGIN_TYPE.VST, false));
                     }
                     for (HashMap.Entry<String, Integer> entry : vst3Map.entrySet()) {
-                        plugins.add(new Plugin(entry.getKey(), entry.getValue(), VST_TYPE.VST3, false));
+                        plugins.add(new Plugin(entry.getKey(), entry.getValue(), PLUGIN_TYPE.VST3, false));
                     }
-                    
+
+                    if(USER_OS == OS.MAC){ 
+                        HashMap<String, Integer> auMap = createVstMap(AUPluginList);
+                        for (HashMap.Entry<String, Integer> entry : auMap.entrySet()) {
+                            plugins.add(new Plugin(entry.getKey(), entry.getValue(), PLUGIN_TYPE.AU, false));
+                        }
+                        System.out.println();
+                        System.out.println("---------------- AU Plugins Used: -----------------");
+                        printPlugins(auMap);
+                    }
+
                     System.out.println();
                     System.out.println("---------------- VST Plugins Used: ----------------");
                     printPlugins(vstMap);
@@ -206,7 +209,7 @@ public class WhoCrashedMyProject {
                     System.out.println();
                     System.out.println("----------------- Beginning Debug: ----------------");
                                     
-                    isolateAndTest(vstMap);
+                    isolateAndTest();
 
                     System.out.println();
                     System.out.println("----------------- Crash Report: -------------------");
@@ -215,7 +218,7 @@ public class WhoCrashedMyProject {
 
                     System.out.println();
                     System.out.println("Thank you for using WhoCrashedMyProject. I hope it helps!" + System.lineSeparator()
-                    + " Here is a link to my music if you want to support me: " 
+                    + "Here is a link to my music if you want to support me: " 
                     + ANSI_PURPLE + "https://soundcloud.com/vorso" + ANSI_RESET);
                     System.out.println("Cheers :-)");
 
@@ -348,32 +351,50 @@ public class WhoCrashedMyProject {
         Vst_Folder      = new File(parsePath(vstFolder));
         Vst3_Folder     = new File(parsePath(vst3Folder));
         Au_Folder       = new File(parsePath(auFolder));
-        Ableton    = new File(parsePath(abletonPath));
-
-        VST_FOLDER      = parsePath(vstFolder);
-        VST3_FOLDER     = parsePath(vst3Folder);
-        AU_FOLDER       = parsePath(auFolder);
-        ABLETON_PATH    = parsePath(abletonPath);
+        Ableton         = new File(parsePath(abletonPath));
 
         return true;
     }
 
     public static void printFinalReport(ArrayList<Plugin> plugins) {
-        Boolean firstVst = true;
-        Boolean firstVst3 = true;      
+ 
         System.out.println();
 
-        for(int i = 0; i < plugins.size(); i++) {
-            if(firstVst) {
-                System.out.println("----------------- VSTs: ---------------------------");
-                firstVst = false;
-            }
-            if(plugins.get(i).vstType == VST_TYPE.VST3 && firstVst3) {
-                System.out.println();
-                System.out.println("----------------- VST3s: --------------------------");
-                firstVst3 = false;
-            }
+        ArrayList<Plugin> aus = new ArrayList<>();
+        ArrayList<Plugin> vsts = new ArrayList<>();
+        ArrayList<Plugin> vst3s = new ArrayList<>();
 
+        for(int i = 0; i < plugins.size(); i++) {
+            if(plugins.get(i).pluginType == PLUGIN_TYPE.AU) {
+                aus.add(plugins.get(i));
+            }
+            if(plugins.get(i).pluginType == PLUGIN_TYPE.VST) {
+                vsts.add(plugins.get(i));
+            }
+            if(plugins.get(i).pluginType == PLUGIN_TYPE.VST3) {
+                vst3s.add(plugins.get(i));
+            }
+        }
+
+        printPlugins(aus, PLUGIN_TYPE.AU);
+        printPlugins(vsts, PLUGIN_TYPE.VST);
+        printPlugins(vst3s, PLUGIN_TYPE.VST3);
+
+    }
+
+    public static void printPlugins(ArrayList<Plugin> plugins, PLUGIN_TYPE pluginType) {
+        if(pluginType == PLUGIN_TYPE.AU) {
+            System.out.println("----------------- AUs: ---------------------------");
+        }
+        else if(pluginType == PLUGIN_TYPE.VST) {
+            System.out.println("----------------- VSTs: ---------------------------");
+        }
+        else if(pluginType == PLUGIN_TYPE.VST3) {
+            System.out.println("----------------- VST3s: ---------------------------");
+        }
+
+        for(int i = 0; i < plugins.size(); i++) {
+           
             Plugin thisPlugin = plugins.get(i);
 
             if(thisPlugin.working) {
@@ -392,9 +413,11 @@ public class WhoCrashedMyProject {
             System.out.print(ANSI_RESET);
             System.out.println();
         }
-    }
+    } 
 
-    public static void isolateAndTest(HashMap<String, Integer> vstMap) throws IOException, InterruptedException {
+
+
+    public static void isolateAndTest() throws IOException, InterruptedException {
 
         ArrayList<Plugin> pluginsCopy = new ArrayList<Plugin>(plugins);
 
@@ -405,20 +428,10 @@ public class WhoCrashedMyProject {
             
             System.out.println(ANSI_YELLOW + "----------------- Isolating " + currentPlugin.name + ANSI_RESET);
 
-            File pluginFolder;
-
-            switch(currentPlugin.vstType) { //TODO Add AU
-                case VST:   pluginFolder = Vst_Folder; break;
-                case VST3:  pluginFolder = Vst3_Folder; break;
-                default:    pluginFolder = Vst_Folder; break;
-            } 
-
-            Path isolatedVstPath = isolate(pluginFolder, currentPlugin.name);
-
-            testing = true;
+            Path isolatedVstPath = isolate();
             
             if(isolatedVstPath == null) {
-                System.out.println(ANSI_PURPLE + "The " + currentPlugin.vstType.name() + " file " 
+                System.out.println(ANSI_PURPLE + "The " + currentPlugin.pluginType.name() + " file " 
                 + currentPlugin.name + " could not be found. Skipping test..." + ANSI_RESET);
             } else {
                 System.out.println("Opening Ableton...");
@@ -428,21 +441,20 @@ public class WhoCrashedMyProject {
                 openAbleton.destroy();
 
                 undoIsolate();
-                testing = false;
 
                 if(openAbleton.exitValue() == 1) {
-                    System.out.println(ANSI_GREEN + currentPlugin.name + " (" + currentPlugin.vstType + ") did not cause the crash." + ANSI_RESET);
+                    System.out.println(ANSI_GREEN + currentPlugin.name + " (" + currentPlugin.pluginType + ") did not cause the crash." + ANSI_RESET);
                     currentPlugin.working = true;
                 }
                 else {
                     System.out.println(ANSI_RED + "The project opens correctly without " + 
-                    currentPlugin.name + " (" + currentPlugin.vstType +  ")." + System.lineSeparator() +
+                    currentPlugin.name + " (" + currentPlugin.pluginType +  ")." + System.lineSeparator() +
                     "This may indicate that this plugin" + 
                     " is causing Ableton Live to crash." + ANSI_RESET); 
                     currentPlugin.working = false;
                     Thread.sleep(3000);
 
-                    System.out.println("Opening Ableton again to redect plugin " + currentPlugin.name + " (" + currentPlugin.vstType +  ")...");
+                    System.out.println("Opening Ableton again to redect plugin " + currentPlugin.name + " (" + currentPlugin.pluginType +  ")...");
                     Process openAbletonAgain = OpenAbleton(Project_File);
                     openAbletonAgain.waitFor();
                     openAbletonAgain.destroy();
@@ -456,9 +468,17 @@ public class WhoCrashedMyProject {
         return Runtime.getRuntime().exec(params);
     }
 
-    public static Path isolate(File pluginDir, String pluginName) throws IOException, InterruptedException {
+    public static Path isolate() throws IOException, InterruptedException {
+        File pluginDir;
 
-        currentPlugin.pluginFile = searchFile(pluginDir, pluginName);
+        switch(currentPlugin.pluginType) { 
+            case AU:    pluginDir = Au_Folder;   break;
+            case VST:   pluginDir = Vst_Folder;  break;
+            case VST3:  pluginDir = Vst3_Folder; break;
+            default:    pluginDir = Vst_Folder;  break;
+        } 
+
+        currentPlugin.pluginFile = searchFile(pluginDir, fixPluginSpecificName(currentPlugin.name));
  
         if(currentPlugin.pluginFile == null) {
             return null;
@@ -468,17 +488,6 @@ public class WhoCrashedMyProject {
         FileUtils.moveDirectory(currentPlugin.pluginFile, currentPlugin.isolatedFile);
         currentPlugin.currentlyIsolated = true;
 
-        /*
-        try {
-            Files.move(Paths.get(thisVst.getAbsolutePath()), isolatedPath, StandardCopyOption.REPLACE_EXISTING);
-        } catch (java.nio.file.DirectoryNotEmptyException e) {
-            System.out.println(ANSI_RED + "Cannot move files between volumes" + ANSI_RESET);
-        }*/
-
-        //String path1 = Paths.get(thisVst.getAbsolutePath()).toString();
-       // String path2 = isolatedPath.toString();
-
-        //Boolean didItWork = thisVst.renameTo(new File(path2));
         Thread.sleep(1000);
 
         return currentPlugin.isolatedFile.toPath();
@@ -488,36 +497,29 @@ public class WhoCrashedMyProject {
 
         FileUtils.moveDirectory(currentPlugin.isolatedFile, currentPlugin.pluginFile);
         currentPlugin.currentlyIsolated = false;
-        //Files.move(isolatedVstPath, Paths.get(tempFileNameStore),  StandardCopyOption.REPLACE_EXISTING);
         Thread.sleep(1000);
     }
 
-    public static File searchFile(File file, String search) {
-        if(search.contains("Uhbik")) {  //U-He Uhbik vst3 are all grouped into one file
-            search = "Uhbik";
+    public static String fixPluginSpecificName(String name) {
+        if(name.contains("Uhbik")) {  //U-He Uhbik vst3 are all grouped into one file
+            return "Uhbik";
         }
- 
-    /*
+        if(name.contains("(Mono)")) { //Fabfilter plugins also have (Mono) Duplicates
+            return name.replace("(Mono)", "");
+        }
+        if(name.contains("FF Pro-")){ //Audio units abreviate the plugin name but not the plugin file name
+            return name.replace("FF Pro-", "FabFilter Pro-");
+        } 
+        return name;
+    }
 
-    This doesnt work!!!!!!!!!! It only works if you want the FIRST thing you find thats a vst / au. 
-    You need to be looking for a SPECIFIC thing
-    */
-    /*
-        if(file.getName().contains(".component")){
-            return file;
-        }
-        if(file.getName().contains(".vst")){
-            return file;
-        }
-        if(file.getName().contains(".vst3")){
-            return file;
-        }*/
+    public static File searchFile(File file, String search) {
 
         boolean isPluginFile = file.getName().contains(".component") || file.getName().contains(".vst") || file.getName().contains(".vst3");
 
         if (file.isDirectory() && !isPluginFile) {
             File[] arr = file.listFiles();
-            for (File f : arr) {
+            for (File f : arr) { 
                 if(!f.getName().contains(".DS_Store")){
                     File found = searchFile(f, search);
                     if (found != null){
@@ -526,8 +528,14 @@ public class WhoCrashedMyProject {
                 }
             }
         } else {
-            if (file.getName().contains(search) && !file.getName().contains("(Mono)")) { //Fabfilter plugins also have (Mono) Duplicates
-                return file;
+            if (file.getName().contains(search) && !file.getName().contains(".DS_Store")) {
+                if(file.getName().contains("FX")) { //Some plugins come with an included "FX" version
+                    if(search.contains("FX")){
+                        return file;
+                    }
+                } else {
+                    return file;
+                }
             }
         }
         return null;
