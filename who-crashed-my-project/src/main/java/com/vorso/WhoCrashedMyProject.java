@@ -6,6 +6,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -208,7 +209,10 @@ public class WhoCrashedMyProject {
 
                     System.out.println();
                     System.out.println("----------------- Beginning Debug: ----------------");
-                                    
+                    System.out.println("If Ableton Live hits an error, please click OK on the error message to continue debug.");           
+                    System.out.println("If Ableton Live opens correctly during debug, " + ANSI_RED + "please immediately close ");
+                    System.out.println("Ableton Live without changing your project" + ANSI_RESET + " to allow debug to continue.");              
+   
                     isolateAndTest();
 
                     System.out.println();
@@ -283,7 +287,7 @@ public class WhoCrashedMyProject {
         }
 
         if(!Ableton.isFile()) {
-            System.out.println(ANSI_RED + "Ableton application project file found in supplied Ableton file" + ANSI_RESET);
+            System.out.println(ANSI_RED + "Ableton application not found in supplied Ableton Folder" + ANSI_RESET);
             return false;
         }
         return true;
@@ -383,9 +387,12 @@ public class WhoCrashedMyProject {
     }
 
     public static void printPlugins(ArrayList<Plugin> plugins, PLUGIN_TYPE pluginType) {
-        if(pluginType == PLUGIN_TYPE.AU) {
-            System.out.println("----------------- AUs: ---------------------------");
+        if(USER_OS == OS.MAC){
+            if(pluginType == PLUGIN_TYPE.AU) {
+                System.out.println("----------------- AUs: ---------------------------");
+            }
         }
+
         else if(pluginType == PLUGIN_TYPE.VST) {
             System.out.println("----------------- VSTs: ---------------------------");
         }
@@ -485,7 +492,14 @@ public class WhoCrashedMyProject {
         }
 
         currentPlugin.isolatedFile = Paths.get(Isolation_Folder.getAbsolutePath(), currentPlugin.pluginFile.getName()).toFile();
-        FileUtils.moveDirectory(currentPlugin.pluginFile, currentPlugin.isolatedFile);
+        
+        if(USER_OS == OS.MAC){ //Mac OS treats plugins as directories, Windows treats them as files
+            FileUtils.moveDirectory(currentPlugin.pluginFile, currentPlugin.isolatedFile);
+        } 
+        else if(USER_OS == OS.WINDOWS) {
+            Files.move(currentPlugin.pluginFile.toPath(), currentPlugin.isolatedFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        }
+
         currentPlugin.currentlyIsolated = true;
 
         Thread.sleep(1000);
@@ -495,7 +509,13 @@ public class WhoCrashedMyProject {
 
     public static void undoIsolate() throws IOException, InterruptedException {
 
-        FileUtils.moveDirectory(currentPlugin.isolatedFile, currentPlugin.pluginFile);
+        if(USER_OS == OS.MAC){ //Mac OS treats plugins as directories, Windows treats them as files
+            FileUtils.moveDirectory(currentPlugin.isolatedFile, currentPlugin.pluginFile);
+        } 
+        else if(USER_OS == OS.WINDOWS) {
+            Files.move(currentPlugin.isolatedFile.toPath(), currentPlugin.pluginFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        }
+
         currentPlugin.currentlyIsolated = false;
         Thread.sleep(1000);
     }
