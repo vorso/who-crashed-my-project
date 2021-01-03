@@ -210,8 +210,7 @@ public class WhoCrashedMyProject {
                     System.out.println();
                     System.out.println("----------------- Beginning Debug: ----------------");
                     System.out.println("If Ableton Live hits an error, please click OK on the error message to continue debug.");           
-                    System.out.println("If Ableton Live opens correctly during debug, " + ANSI_RED + "please immediately close ");
-                    System.out.println("Ableton Live without changing your project" + ANSI_RESET + " to allow debug to continue.");              
+                    System.out.println("If Ableton Live opens correctly during debug, " + ANSI_RED + "please immediately close Ableton Live without making changes to your project" + ANSI_RESET + " to allow debug to continue.");              
    
                     isolateAndTest();
 
@@ -433,7 +432,7 @@ public class WhoCrashedMyProject {
         for(int i = 0; i < plugins.size(); i++) {
             currentPlugin = pluginsCopy.get(i);
             
-            System.out.println(ANSI_YELLOW + "----------------- Isolating " + currentPlugin.name + ANSI_RESET);
+            System.out.println(ANSI_YELLOW + "----------------- Isolating " + currentPlugin.name + " (" + currentPlugin.pluginType +  ")" + ANSI_RESET);
 
             Path isolatedVstPath = isolate();
             
@@ -540,7 +539,7 @@ public class WhoCrashedMyProject {
         if (file.isDirectory() && !isPluginFile) {
             File[] arr = file.listFiles();
             for (File f : arr) { 
-                if(!f.getName().contains(".DS_Store")){
+                if(!f.getName().contains(".DS_Store") && !f.getAbsolutePath().contains("32Bit")){
                     File found = searchFile(f, search);
                     if (found != null){
                         return found;
