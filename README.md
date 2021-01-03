@@ -55,12 +55,12 @@ Make sure that Ableton is closed before starting.
         ABLETON_PATH:{<<Absolute Path to the "Live" file this is inside the Ableton package Ableton Live 10 Suite/contents/MacOS/Live>>}
          
 2 - Run WhoCrashedMyProject as administrator (Plugins folders normally can only be edited by administrators by default on Windows and Mac OS)...
-  - ... using Command Line
+  - ... using Command Line:
     - Right click the Command Line icon and click "Run As Administrator".
-    - Navigate to the WhoCrashedMyProject directory.
+    - Navigate to the who-crashed-my-project/who-crashed-my-project directory. The folder you need to be in contains the file "pom.xml" which contains the Maven dependencies for the project.
     - Run << mvn compile exec:java -Dexec.mainClass="com.vorso.WhoCrashedMyProject" >> (note: you will need Maven installed to use this command, useful links - https://www.baeldung.com/install-maven-on-windows-linux-mac , https://maven.apache.org/install.html )
     
-  - ... using VSCode
+  - ... using VSCode:
     - Right click VSCode and click "Run As Administrator". 
     - Open the WhoCrashedMyProject Folder
     - Open the Terminal window (The results will be output here).
